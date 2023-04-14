@@ -1,20 +1,15 @@
-require('dotenv').config();
-const url = process.env.URL;
 const {MongoClient} = require('mongodb');
 
-exports.databaseQuery = async function databaseQuery(coll, type, data, toArray){
+module.exports = async (url, coll, dbName) => {
+  const connection = await MongoClient.connect(url);
+  const database = connection.db('testDatabase');
+  const collection = database.collection(coll);
 
-    const connection = await MongoClient.connect(url);
-
-    const database = connection.db('mongodb');
-
-    const collection = database.collection(coll);
-
-    if(toArray){
-        const documents = await collection[type](data).toArray();
-        return await documents;
-    }
-    
-    const documents = await collection[type](data);
-    return await documents;
-} 
+  return {
+    deleteOne: async (data) => {return await collection.deleteOne(data)},
+    find: async (data = {}, toArray = false) => {return (toArray) ? await collection.find(data).toArray() : await collection.find(data)},
+    findOne: async (data = {}) => {return await collection.findOne(data)},
+    insertOne: async (data) => {return await collection.insertOne(data)},
+    updateOne: async (filter, data) => {return await collection.updateOne(filter, data)},
+  }
+}
