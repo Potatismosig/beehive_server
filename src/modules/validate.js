@@ -1,5 +1,6 @@
 const Joi = require('joi');
-exports.validate = function validate(val) {
+
+exports.validate = function validate(val, req, res) {
     const results = [];
 
     val.forEach((field) => {
@@ -12,6 +13,11 @@ exports.validate = function validate(val) {
         if (propertyToValidateValue === undefined) {
             const errorMessage = `Property "${propertyToValidateKey}" is undefined`;
             results.push(errorMessage);
+            return;
+        }
+
+        if (!(propertyToValidateKey in req.body)) {
+            // Property is not present in request body, skip validation
             return;
         }
 
@@ -34,8 +40,9 @@ exports.validate = function validate(val) {
         }
 
         // Validate the property using the defined schema
-        const isValid = fieldSchema.validate(propertyToValidateValue);
+        const isValid = fieldSchema.validate(req.body[propertyToValidateKey]);
         if (isValid.error) {
+            console.log(isValid.error.details[0].message);
             const errorMessage = isValid.error.details[0].message.replace('value', `${propertyToValidateKey}`);
             results.push(errorMessage);
         } else {
@@ -43,10 +50,18 @@ exports.validate = function validate(val) {
         }
     });
 
-    const error = results.find(result => result !== "success");
-    if (error) {
-        return error; // If an error message is found, return it
+    // Check for extra properties in the request body
+    const extraProperties = Object.keys(req.body).filter(prop => !val.find(field => Object.keys(field).includes(prop)));
+    if (extraProperties.length > 0) {
+        const errorMessage = `Invalid properties: ${extraProperties.join(', ')}`;
+        results.push(errorMessage);
     }
 
-    return results; // Move the 'return results;' statement outside the forEach loop
+    const error = results.find(result => result !== "success");
+    if (error) {
+        res.status(400).json(error);
+        return;
+    }
+
+    return results;
 };
