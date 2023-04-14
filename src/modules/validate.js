@@ -42,7 +42,6 @@ exports.validate = function validate(val, req, res) {
         // Validate the property using the defined schema
         const isValid = fieldSchema.validate(req.body[propertyToValidateKey]);
         if (isValid.error) {
-            console.log(isValid.error.details[0].message);
             const errorMessage = isValid.error.details[0].message.replace('value', `${propertyToValidateKey}`);
             results.push(errorMessage);
         } else {
