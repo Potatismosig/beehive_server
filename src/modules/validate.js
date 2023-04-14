@@ -58,10 +58,12 @@ exports.validate = function validate(val, req, res) {
     }
 
     const error = results.find(result => result !== "success");
+
+    const success = !error;
     if (error) {
         res.status(400).json(error);
-        return;
+        return false;
     }
 
-    return results;
+    return success;
 };
