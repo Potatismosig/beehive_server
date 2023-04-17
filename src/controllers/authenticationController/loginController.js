@@ -20,33 +20,31 @@ exports.login = async function login(req, res) {
     }
     
     try {
-        
         const user = {username: username}
         const findQuery = await mongodb(url, 'BeeHive', 'users')
         const findResult = await findQuery.findOne(user);
+
         const storedPassword = findResult.password;
         const isEqual = bcrypt.compareSync(password, storedPassword);
 
         if (!isEqual) {
-                         res.status(401).json({message: 'Invalid login'})
+            res.status(401).json({message: 'Invalid login'})
+            return;
+        }
+
+        const token = jwt.sign({username}, secret, {expiresIn: 120});
+        res.cookie('token', token, {
+            maxAge: 3600000,
+            sameSite: 'none',
+            // Secure är just nu buggat för Postman, använd inte secure: true för Postman.
+            secure: false,
+            httpOnly: false
+        });
         
-                        return;
-              }
-
-              const token = jwt.sign({username}, secret, {expiresIn: 120});
-            res.cookie('token', token, {
-                maxAge: 3600000,
-                sameSite: 'none',
-                // Secure är just nu buggat för Postman, använd inte secure: true för Postman.
-                secure: false,
-                httpOnly: false
-            });
-
-            res.status(200).json('Login successful');
-      
+        res.status(200).json('Login successful');
         return;
+
     } catch (error) {
-        
         res.status(500).json({ message: 'Invalid credentials' });
     }
 };
