@@ -1,8 +1,8 @@
 const {MongoClient} = require('mongodb');
 
-module.exports = async (url, coll, dbName) => {
+module.exports = async (url, dbName, coll) => {
   const connection = await MongoClient.connect(url);
-  const database = connection.db('testDatabase');
+  const database = connection.db(dbName);
   const collection = database.collection(coll);
 
   return {

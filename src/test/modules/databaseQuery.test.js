@@ -17,7 +17,7 @@ describe('MongoDB operations', () => {
     const dbName = 'testDatabase';
     const coll = 'testCollection';
 
-    testCollection = await mongoOperations(mongoUri, coll, dbName);
+    testCollection = await mongoOperations(mongoUri, dbName, coll);
   });
 
   afterAll(async () => {
