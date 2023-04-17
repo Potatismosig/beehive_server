@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt');
 const secret = process.env.SECRET;
 const url = process.env.URL;
 const { validate } = require('../../modules/validate');
-
+const mongodb = require('../../modules/databaseQuery');
 
 exports.register = function register(req, res) {
     const { username, password } = req.body;
@@ -17,6 +17,16 @@ exports.register = function register(req, res) {
 
     const salt = bcrypt.genSaltSync(10);
     const hashed = bcrypt.hashSync(password, salt);
+    const user = { username: username, password: hashed }
 
-    res.status(201).json(validationResult);
+    async function insertUser(url, user) {
+        const insertQuery = await mongodb(url, 'BeeHive', 'users');
+        const insertQueryResult = await insertQuery.insertOne(user);
+        return insertQueryResult;
+    }
+
+    const insertResult = insertUser(url, user);
+
+
+    res.status(201).json(insertResult);
 }
