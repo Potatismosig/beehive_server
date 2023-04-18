@@ -27,7 +27,7 @@ exports.login = async function login(req, res) {
             res.status(401).json('Invalid credentials')
             return;
         }
-
+        console.log(url);
         const storedPassword = findResult.password;
         const isEqual = bcrypt.compareSync(password, storedPassword);
 
