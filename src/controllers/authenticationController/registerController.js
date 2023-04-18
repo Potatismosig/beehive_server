@@ -9,7 +9,7 @@ exports.register = async function register(req, res) {
     const { username, password } = req.body;
     const data = [
         { username: username, type: 'string', min: 3, max: 50, required: true },
-        { password: password, type: 'string', min: 3, max: 50, required: true }, 
+        { password: password, type: 'string', min: 3, max: 50, required: true },
     ];
 
     const validationResult = validate(data, req, res);
@@ -17,7 +17,6 @@ exports.register = async function register(req, res) {
         // Validation failed, return early
         return;
     }
-    
     try {
         const salt = bcrypt.genSaltSync(10);
         const hashed = bcrypt.hashSync(password, salt);
@@ -26,9 +25,11 @@ exports.register = async function register(req, res) {
 
         const insertQuery = await mongodb(url, 'BeeHive', 'users')
         const insertResult = await insertQuery.insertOne(user);
-        
-        res.status(201).json(insertResult);
-        return;
+        if (insertResult.acknowledged == true) {
+            res.status(201).json('Registered successfully');
+            return;
+        }
+
     } catch (error) {
         if (error.code === 11000) {
             res.status(409).json('' + error.keyValue.username + ' already exists');
