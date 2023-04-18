@@ -9,8 +9,8 @@ on:
       - main
 
 env:
-  URL: ${{ secrets.URL }}
-  SECRET: ${{ secrets.SECRET }}
+  URL: ${{ secrets.url }}
+  SECRET: ${{ secrets.secret }}
 
 jobs:
   jestTest:
