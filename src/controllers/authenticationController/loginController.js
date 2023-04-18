@@ -23,12 +23,16 @@ exports.login = async function login(req, res) {
         const user = {username: username}
         const findQuery = await mongodb(url, 'BeeHive', 'users')
         const findResult = await findQuery.findOne(user);
+       if (!findResult) {
+            res.status(401).json('Invalid credentials')
+            return;
+        }
 
         const storedPassword = findResult.password;
         const isEqual = bcrypt.compareSync(password, storedPassword);
 
         if (!isEqual) {
-            res.status(401).json({message: 'Invalid login'})
+            res.status(401).json('Invalid credentials')
             return;
         }
 
@@ -40,11 +44,10 @@ exports.login = async function login(req, res) {
             secure: false,
             httpOnly: false
         });
-        
+            
         res.status(200).json('Login successful');
-        return;
-
     } catch (error) {
-        res.status(500).json({ message: 'Invalid credentials' });
+        console.log(error);
+        res.status(500).json('Internal error');
     }
 };
