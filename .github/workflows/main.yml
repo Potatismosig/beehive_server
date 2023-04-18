@@ -8,6 +8,10 @@ on:
     branches:
       - main
 
+env:
+  URL: ${{ secrets.URL }}
+  SECRET: ${{ secrets.SECRET }}
+
 jobs:
   jestTest:
     runs-on: macos-latest
