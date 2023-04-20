@@ -8,10 +8,6 @@ on:
     branches:
       - main
 
-env:
-  URL: ${{ secrets.url }}
-  SECRET: ${{ secrets.secret }}
-
 jobs:
   jestTest:
     runs-on: macos-latest
@@ -20,5 +16,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '18.x'
+        env:
+          URL: ${{ secrets.url }}
+          SECRET: ${{ secrets.secret }}
       - run: npm i
       - run: npm test
