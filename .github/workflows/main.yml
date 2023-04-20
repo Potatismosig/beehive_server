@@ -16,5 +16,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '18.x'
+        env:
+          URL: ${{ secrets.URL }}
+          SECRET: ${{ secrets.SECRET }}
       - run: npm i
       - run: npm test
