@@ -10,14 +10,14 @@ on:
 
 jobs:
   jestTest:
+    env:
+      URL: ${{ secrets.URL }}
+      SECRET: ${{ secrets.SECRET }}
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '18.x'
-        env:
-          URL: ${{ secrets.URL }}
-          SECRET: ${{ secrets.SECRET }}
       - run: npm i
       - run: npm test
