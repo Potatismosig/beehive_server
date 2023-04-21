@@ -27,7 +27,6 @@ exports.login = async function login(req, res) {
             res.status(401).json('Invalid credentials')
             return;
         }
-        console.log(url);
         const storedPassword = findResult.password;
         const isEqual = bcrypt.compareSync(password, storedPassword);
 
@@ -47,7 +46,6 @@ exports.login = async function login(req, res) {
             
         res.status(200).json('Login successful');
     } catch (error) {
-        console.log(error);
         res.status(500).json('Internal error');
     }
 };
