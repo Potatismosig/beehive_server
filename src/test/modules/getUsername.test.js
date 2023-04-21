@@ -19,7 +19,7 @@ describe('getUsername', () => {
     const mockSecret = secret;
     const mockUsername = 'testUser';
     const mockReq = new Request();
-    mockReq.cookies = { Token: mockToken };
+    mockReq.cookies = { token: mockToken };
     const mockRes = new Response();
 
     jwt.verify.mockReturnValue({ username: mockUsername });
