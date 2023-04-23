@@ -14,6 +14,6 @@ const { postsRoute } = require('./routes/postsRoute');
 
 server.use('/auth', authenticationRoute);
 server.use('/users', checkAuthentication, usersRoute);
-server.use('/users', checkAuthentication, postsRoute);
+server.use('/posts', checkAuthentication, postsRoute);
 
 server.listen(5050);
