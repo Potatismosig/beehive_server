@@ -1,5 +1,5 @@
 const mongodb = require('../../modules/databaseQuery');
-const { getUserPosts } = require('../../controllers/postController/getUserPosts');
+const { getUserPosts } = require('../../controllers/postController/getUserPostsController');
 const { getUsername } = require('../../modules/getUsername');
 const { Request, Response } = require('jest-express/lib');
 const mockCollection = {
