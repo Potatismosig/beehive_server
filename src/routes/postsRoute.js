@@ -10,4 +10,5 @@ postsRoute.get('/userposts', getUserPosts);
 postsRoute.post('/create', createPost);
 postsRoute.delete('/delete', deletePost);
 
+
 exports.postsRoute = postsRoute;
