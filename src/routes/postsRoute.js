@@ -1,9 +1,16 @@
 const express = require('express');
-
-const { getUserPosts } = require('../controllers/postController/getUserPostsController');
+const { createPost } = require('../controllers/postController/createPostController');
 const { likePost } = require('../controllers/postController/likePostController');
+const { getUserPosts } = require('../controllers/postController/getUserPostsController');
+const { deletePost } = require('../controllers/postController/deletePostController');
+const { updatePost } = require('../controllers/postController/updatePostController');
+
 const postsRoute = express.Router();
 
 postsRoute.get('/userposts', getUserPosts);
+postsRoute.post('/create', createPost);
+postsRoute.delete('/delete', deletePost);
+postsRoute.put('/update', updatePost);
 postsRoute.patch('/likePost', likePost);
+
 exports.postsRoute = postsRoute;
