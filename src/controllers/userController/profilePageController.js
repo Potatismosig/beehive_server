@@ -45,8 +45,7 @@ const loggedInUsername  = getUsername(req, res);
         let userPosts = [];
         if(isFollowingUser) {
             const postsQuery = await mongodb(url, 'BeeHive', 'posts')
-            const userPostsCursor = await postsQuery.find(user);
-            userPosts = await userPostsCursor.toArray();
+            userPosts = await postsQuery.find(user, true);
         }
             
 
