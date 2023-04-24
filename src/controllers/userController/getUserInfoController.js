@@ -1,10 +1,10 @@
 require('dotenv').config();
 const url = process.env.URL;
 const mongodb = require('../../modules/databaseQuery');
-
+const {getUsername} = require('../../modules/getUsername')
 
 exports.getUserInfo = async function getUserInfo(req, res) {
-    const { username } = req.body;
+    const username = getUsername();
 
     try {
         const user = {username: username}
@@ -12,10 +12,10 @@ exports.getUserInfo = async function getUserInfo(req, res) {
         const findResult = await findQuery.findOne(user);
         
         if (!findResult) {
-            res.status(404).json('User not found')
+            res.status(404).json('User not found');
             return;
         }
-        res.json(findResult);
+        res.status(201).json(findResult);
          } 
          catch (error) {
         console.log(error);
