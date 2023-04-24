@@ -8,7 +8,7 @@ const { toArray } = require('mongodb');
 
 exports.profilePage = async function profilePage(req, res) {
 const {profileUsername} = req.body;
-const username = getUsername(req, res);
+const loggedInUsername  = getUsername(req, res);
     //   res.status(200).json('test');
 
     try {
@@ -21,22 +21,36 @@ const username = getUsername(req, res);
             // Validation failed, return early
             return;
         }
+
+        const usersQuery = await mongodb(url, 'BeeHive', 'users');
+
         //Show user information
         const user = {username: profileUsername}
-        const query = await mongodb(url, 'BeeHive', 'users')
-        const findResult = await query.findOne(user);
+        const findResult = await usersQuery.findOne(user);
         
         if (!findResult) {
             res.status(404).json('User not found');
             return;
         }
-        
-        //Show user posts
-        const postsQuery = await mongodb(url, 'BeeHive', 'posts')
-        const userPostsCursor = await postsQuery.find(user);
-        const findUserPosts = await userPostsCursor.toArray();
 
-        res.status(200).json({user: findResult, posts: findUserPosts});
+          // Check if logged-in user is following user
+          const findLoggedInUserResult = await usersQuery.findOne({ username: loggedInUsername });
+          if (!findLoggedInUserResult) {
+              res.status(500).json('Internal error');
+              return;
+          }
+          const isFollowingUser = findLoggedInUserResult.followers.includes(profileUsername);
+
+        //Show user posts
+        let userPosts = [];
+        if(isFollowingUser) {
+            const postsQuery = await mongodb(url, 'BeeHive', 'posts')
+            const userPostsCursor = await postsQuery.find(user);
+            userPosts = await userPostsCursor.toArray();
+        }
+            
+
+        res.status(200).json({user: findResult, posts: userPosts});
          } 
          catch (error) {
         console.log(error);
