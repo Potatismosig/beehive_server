@@ -4,7 +4,7 @@ const mongodb = require('../../modules/databaseQuery');
 const {getUsername} = require('../../modules/getUsername')
 
 exports.getUserInfo = async function getUserInfo(req, res) {
-    const username = getUsername();
+    const username = getUsername(req, res);
 
     try {
         const user = {username: username}
