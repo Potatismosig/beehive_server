@@ -25,7 +25,7 @@ exports.createPost = async function createPost(req, res) {
         const post = { 
             username: username, 
             postContent: postContent, 
-            link:link,
+            linkImg:link,
             likes: [
                 
             ],
