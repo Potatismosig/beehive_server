@@ -14,7 +14,6 @@ exports.getFriendsPosts = async function getFriendsPosts(req, res) {
         const friendPosts = await findQueryPosts.find({ username: { $in: friends } }, true);
         res.status(200).json(friendPosts);
     } catch (error) {
-        console.log(error);
-        res.status(500).json('Internal error');
+        res.status(500).json('Internal error:' + error);
     }
 };

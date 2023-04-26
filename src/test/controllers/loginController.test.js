@@ -10,39 +10,10 @@ app.use(express.json());
 app.post('/login', login);
 
 describe('Login Endpoint', () => {
-  
 
-    // Test for successful login
-    it('should log in a registered user', async () => {
-      const testUser = {
-        username: 'testuser1',
-        password: 'testpassword',
-    };
-        const response = await request(app)
-            .post('/login')
-            .send(testUser);
 
-        expect(response.status).toBe(200);
-        expect(response.body).toBe('Login successful');
-    });
-
-    // Test for invalid login
-    it('should return status 401 if invalid login', async () => {
-    
-      const testUser = {
-        username: 'RandomUser',
-        password: 'testpassword',
-    };
-
-        const response = await request(app)
-            .post('/login')
-            .send(testUser);
-
-        expect(response.status).toBe(401);
-        expect(response.text).toBe("\"Invalid credentials\"");
-    });
-    // Test for setting cookie on logged in user
-it('should log in a registered user and set the token cookie', async () => {
+  // Test for successful login
+  it('should log in a registered user', async () => {
     const testUser = {
       username: 'testuser1',
       password: 'testpassword',
@@ -50,7 +21,36 @@ it('should log in a registered user and set the token cookie', async () => {
     const response = await request(app)
       .post('/login')
       .send(testUser);
-  
+
+    expect(response.status).toBe(200);
+    expect(response.body).toBe('Login successful');
+  });
+
+  // Test for invalid login
+  it('should return status 401 if invalid login', async () => {
+
+    const testUser = {
+      username: 'RandomUser',
+      password: 'testpassword',
+    };
+
+    const response = await request(app)
+      .post('/login')
+      .send(testUser);
+
+    expect(response.status).toBe(401);
+    expect(response.text).toBe("\"Invalid credentials\"");
+  });
+  // Test for setting cookie on logged in user
+  it('should log in a registered user and set the token cookie', async () => {
+    const testUser = {
+      username: 'testuser1',
+      password: 'testpassword',
+    };
+    const response = await request(app)
+      .post('/login')
+      .send(testUser);
+
     // Ensure the response status is 200
     expect(response.status).toBe(200);
     // Ensure the response body contains the message "Login successful"
@@ -62,6 +62,6 @@ it('should log in a registered user and set the token cookie', async () => {
     const tokenCookie = cookieHeader.split(';')[0];
     expect(tokenCookie).toMatch(/^token=.+/);
   });
-  
+
 });
 

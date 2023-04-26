@@ -21,7 +21,7 @@ describe('Validate function tests', () => {
 
     const validationResult = validate(val, req, res);
 
-    expect(validationResult).toBe(true); 
+    expect(validationResult).toBe(true);
     expect(res.status).not.toHaveBeenCalled();
     expect(res.json).not.toHaveBeenCalled();
   });

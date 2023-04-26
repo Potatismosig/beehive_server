@@ -1,4 +1,4 @@
-const {MongoClient} = require('mongodb');
+const { MongoClient } = require('mongodb');
 
 module.exports = async (url, dbName, coll) => {
   const connection = await MongoClient.connect(url);
@@ -6,10 +6,10 @@ module.exports = async (url, dbName, coll) => {
   const collection = database.collection(coll);
 
   return {
-    deleteOne: async (data) => {return await collection.deleteOne(data)},
-    find: async (data = {}, toArray = false) => {return (toArray) ? await collection.find(data).toArray() : await collection.find(data)},
-    findOne: async (data = {}) => {return await collection.findOne(data)},
-    insertOne: async (data) => {return await collection.insertOne(data)},
-    updateOne: async (filter, data) => {return await collection.updateOne(filter, data)},
+    deleteOne: async (data) => { return await collection.deleteOne(data) },
+    find: async (data = {}, toArray = false) => { return (toArray) ? await collection.find(data).toArray() : await collection.find(data) },
+    findOne: async (data = {}) => { return await collection.findOne(data) },
+    insertOne: async (data) => { return await collection.insertOne(data) },
+    updateOne: async (filter, data) => { return await collection.updateOne(filter, data) },
   }
 }

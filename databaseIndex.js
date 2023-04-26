@@ -1,8 +1,8 @@
-const {MongoClient} = require('mongodb');
+const { MongoClient } = require('mongodb');
 require('dotenv').config();
 const uri = process.env.URL;
 
-async function main(){
+async function main() {
   const client = new MongoClient(uri);
 
   //index for post collection that make likes.user_id unique
@@ -10,11 +10,11 @@ async function main(){
     await client.connect();
     const db = client.db("BeeHive");
     const postsCollection = db.collection("posts");
-    
+
     const res = await postsCollection.createIndex(
       { "_id": 1, "likes.user_id": 1 }, { unique: true, partialFilterExpression: { "likes.user_id": { $exists: true } } }
     );
-    
+
     console.log(res);
   } catch (error) {
     console.error("Error: ", error);
@@ -43,7 +43,7 @@ async function main(){
       }
     );
 
-    console.log(res, res1);
+    console.log(res + '&&' + res1);
   } catch (error) {
     console.error('Error creating indexes:', error);
   } finally {
