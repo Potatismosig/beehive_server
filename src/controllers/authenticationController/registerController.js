@@ -21,7 +21,7 @@ exports.register = async function register(req, res) {
         const salt = bcrypt.genSaltSync(10);
         const hashed = bcrypt.hashSync(password, salt);
 
-        const user = { username: username, password: hashed };
+        const user = { username: username, password: hashed, followers:[] };
 
         const insertQuery = await mongodb(url, 'BeeHive', 'users')
         const insertResult = await insertQuery.insertOne(user);
