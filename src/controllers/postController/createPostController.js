@@ -13,7 +13,7 @@ exports.createPost = async function createPost(req, res) {
         const { postContent, link } = req.body;
         const data = [
             { postContent: postContent, type: 'string', min: 3, max: 1000, required: true },
-            { link: link, type: 'string', min: 3, max: 1000, required: false }, 
+            { link: link, type: 'string', min: 3, max: 1000, required: false },
         ];
 
         const validationResult = validate(data, req, res);
@@ -21,26 +21,26 @@ exports.createPost = async function createPost(req, res) {
             // Validation failed, return early
             return;
         }
-        
-        const post = { 
-            username: username, 
-            postContent: postContent, 
-            link:link,
+
+        const post = {
+            username: username,
+            postContent: postContent,
+            linkImg: link,
             likes: [
-                
+
             ],
             comments: [
-                
+
             ]
-        
+
         };
 
         const insertQuery = await mongodb(url, 'BeeHive', 'posts')
         const insertResult = await insertQuery.insertOne(post);
-        
+
         res.status(201).json(insertResult);
         return;
     } catch (error) {
-        res.status(500).json({ message: 'Something went wrong' });
+        res.status(500).json('Internal error:' + error);
     }
 };

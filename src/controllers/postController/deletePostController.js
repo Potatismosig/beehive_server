@@ -22,23 +22,23 @@ exports.deletePost = async function deletePost(req, res) {
         }
 
         const Query = await mongodb(url, 'BeeHive', 'posts')
-        const findResult = await Query.findOne({_id: new ObjectId(postId)});
-        
-        if(!findResult){
-            res.status(500).json("This post does not exsist");
+        const findResult = await Query.findOne({ _id: new ObjectId(postId) });
+
+        if (!findResult) {
+            res.status(404).json("This post does not exsist");
             return;
         }
 
-        if(findResult.username != username){
-            res.status(500).json("You cannot delete this post");
+        if (findResult.username != username) {
+            res.status(403).json("You cannot delete this post");
             return;
         }
 
-        const deleteResult = await Query.deleteOne({_id: new ObjectId(postId)});
+        const deleteResult = await Query.deleteOne({ _id: new ObjectId(postId) });
 
-        res.status(201).json('Deleted successfully');
+        res.status(204).json('Deleted successfully');
         return;
     } catch (error) {
-        res.status(500).json("error" + error);
+        res.status(500).json('Internal error:' + error);
     }
 };

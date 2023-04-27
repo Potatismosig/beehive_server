@@ -11,7 +11,6 @@ exports.getUserPosts = async function getUserPosts(req, res) {
         const findQuery = await collection.find(user, true);
         res.status(200).json(findQuery);
     } catch (error) {
-        console.log(error);
         res.status(500).json('Internal error');
     }
 };

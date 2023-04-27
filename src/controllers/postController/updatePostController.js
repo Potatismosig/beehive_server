@@ -23,22 +23,22 @@ exports.updatePost = async function updatePost(req, res) {
         }
 
         const Query = await mongodb(url, 'BeeHive', 'posts')
-        const findResult = await Query.findOne({_id: new ObjectId(postId)});
-        if(!findResult){
-            res.status(500).json("This post does not exsist");
+        const findResult = await Query.findOne({ _id: new ObjectId(postId) });
+        if (!findResult) {
+            res.status(404).json("This post does not exsist");
             return;
         }
 
-        if(findResult.username != username){
-            res.status(500).json("You cannot update this post");
+        if (findResult.username != username) {
+            res.status(403).json("You cannot update this post");
             return;
         }
 
-        const updateResult = await Query.updateOne({_id: new ObjectId(postId)}, {$set:{ postContent:newContent}});
+        const updateResult = await Query.updateOne({ _id: new ObjectId(postId) }, { $set: { postContent: newContent } });
 
-        res.status(201).json('Updated successfully');
+        res.status(200).json('Updated successfully');
         return;
     } catch (error) {
-        res.status(500).json("error" + error);
+        res.status(500).json('Internal error:' + error);
     }
 };

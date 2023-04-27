@@ -21,7 +21,7 @@ exports.likePost = async function likePost(req, res) {
         const Query = await mongodb(url, 'BeeHive', 'posts')
         const post = await Query.findOne({ _id: new ObjectId(postId) });
         if (!post) {
-            res.status(404).json({ error: "This post does not exist" });
+            res.status(404).json("This post does not exist");
             return;
         }
 
@@ -29,9 +29,9 @@ exports.likePost = async function likePost(req, res) {
         likes.push(username);
 
         const updateResult = await Query.updateOne({ _id: new ObjectId(postId) }, { $set: { likes: likes } });
-        res.status(201).json(updateResult);
+        res.status(200).json(updateResult);
         return;
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json('Internal error:' + error);
     }
 };
